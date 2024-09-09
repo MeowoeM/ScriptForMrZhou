@@ -1,3 +1,16 @@
+"""
+lanzou云api有变，lanzou_api这个库没来得及更新，会导致需要密码的分享报错，不需要密码的正常下载，下面是临时patch
+
+site_packages/lanzou/api/core.py大致470行，将相应部分替换成下面
+
+sign = re.search(r"skdklds = '(\w+?)'", first_page).group(1)
+kd = re.search(r"kdns =(\d+?);", first_page).group(1)
+file_id = re.search(r"file=(\d+?)'", first_page).group(1)
+post_data = {'action': 'downprocess', 'sign': sign, 'p': pwd, 'kd': kd}
+link_info = self._post(self._host_url + f'/ajaxm.php?file={file_id}', post_data)  # 保存了重定向前的链接信息和文件名
+
+"""
+
 import os
 import time
 from lanzou.api import LanZouCloud
